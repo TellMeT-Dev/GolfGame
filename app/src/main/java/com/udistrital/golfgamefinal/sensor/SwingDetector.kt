@@ -1,6 +1,7 @@
 package com.udistrital.golfgame.sensor
 
-import com.udistrital.golfgame.model.Shot
+import Shot
+import Vector2D
 import kotlin.math.atan2
 import kotlin.math.cos
 import kotlin.math.max
@@ -65,10 +66,9 @@ class SwingDetector(
             isSwingActive = false
 
             return Shot(
-                force = force,
-                directionAngleRad = directionAngle,
-                deltaX = deltaX,
-                deltaY = deltaY
+                fuerza = force,
+                angulo= directionAngle,
+                movimiento = Vector2D(deltaX, deltaY)
             )
         }
 
