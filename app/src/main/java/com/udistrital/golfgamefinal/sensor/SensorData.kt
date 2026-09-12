@@ -1,4 +1,4 @@
-package com.udistrital.golfgame.sensor
+package com.udistrital.golfgamefinal.sensor
 
 /**
  * Contenedor de datos unificados provenientes de los sensores del dispositivo móvil.
