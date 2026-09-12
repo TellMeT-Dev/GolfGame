@@ -1,7 +1,9 @@
-package com.udistrital.golfgame.sensor
+package com.udistrital.golfgamefinal.sensor
 
-import Shot
-import Vector2D
+import com.udistrital.golfgamefinal.model.Shot
+import com.udistrital.golfgamefinal.model.Vector2D
+import kotlin.compareTo
+import kotlin.math.abs
 import kotlin.math.atan2
 import kotlin.math.cos
 import kotlin.math.max
@@ -34,7 +36,7 @@ class SwingDetector(
 
     fun processSensorData(data: SensorData): Shot? {
         val now = data.timestamp
-        if (now - lastShotTimestamp < cooldownMs) {
+        if ((now - lastShotTimestamp) <  cooldownMs) {
             return null
         }
 
@@ -132,9 +134,9 @@ class SwingDetector(
 
     fun calculateDirectionFromAccelerometer(ax: Float, ay: Float): Float {
         val horizontalDeflection = ax
-        val forwardThrust = if (ay != 0f) -kotlin.math.abs(ay) else -1f
+        val forwardThrust = if (ay != 0f) -abs(ay) else -1f
 
-        if (kotlin.math.abs(horizontalDeflection) < 0.8f) {
+        if (abs(horizontalDeflection) < 0.8f) {
             return -Math.PI.toFloat() / 2f
         }
 
