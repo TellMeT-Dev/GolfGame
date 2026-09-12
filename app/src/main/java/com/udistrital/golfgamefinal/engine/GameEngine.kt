@@ -36,7 +36,8 @@ class GameEngine {
             gameStatus = gameStatus,
             hole = hole,
             shot = Shot(fuerza = 0f, angulo = 0f, movimiento = Vector2D(0f, 0f)),
-            vector2D = ball.posicion
+            strokesCount = golpes,
+            isGameFinished = isGameFinished
         )
     }
 
