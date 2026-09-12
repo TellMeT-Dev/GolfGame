@@ -1,3 +1,5 @@
+package com.udistrital.golfgamefinal.model
+
 enum class GameStatus {
     READY, //listo para jugar
     WAITING_FOR_SWING, // Esperando que muevas el telefono

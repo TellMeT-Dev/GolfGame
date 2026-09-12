@@ -1,5 +1,8 @@
+package com.udistrital.golfgamefinal.model
+
 data class Shot (val fuerza: Float,
                  val angulo: Float,
-                 val movimiento: Vector2D){
+                 val movimiento: Vector2D
+){
 
 }

@@ -1,8 +1,12 @@
+package com.udistrital.golfgamefinal.model
+
+import kotlin.math.sqrt
+
 data class Vector2D(val x: Float, val y: Float){
     fun distanceTo(other: Vector2D): Float{
         val dx =other.x - x
         val dy = other.y - y
-        val oper = kotlin.math.sqrt(dx * dx + dy * dy)
+        val oper = sqrt(dx * dx + dy * dy)
         return oper
     }
 
@@ -13,7 +17,7 @@ data class Vector2D(val x: Float, val y: Float){
     }
 
     fun magnitude(): Float{
-        val oper = kotlin.math.sqrt(x * x + y * y)
+        val oper = sqrt(x * x + y * y)
         return oper
     }
 
