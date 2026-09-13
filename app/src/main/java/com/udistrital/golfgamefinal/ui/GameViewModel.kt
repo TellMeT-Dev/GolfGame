@@ -57,6 +57,8 @@ class GameViewModel(
         _showHomeScreen
 
 
+
+
     fun onStartSwingDetection() {
 
         if (!sensorManager.isSensorAvailable()) {
@@ -110,6 +112,10 @@ class GameViewModel(
         _showHomeScreen.value = true
     }
 
+    fun onHoleSelected(holeIndex: Int) {
+        gameEngine.loadHoleByIndex(holeIndex)
+        updateGameState()
+    }
 
     private fun updateGameState() {
 
