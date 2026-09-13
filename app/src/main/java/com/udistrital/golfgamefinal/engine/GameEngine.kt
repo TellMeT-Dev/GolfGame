@@ -11,9 +11,9 @@ class GameEngine {
 
     companion object { // el transformar los val en const val aportacion de IA
         const val pared_izq = 0f
-        const val pared_der = 2f
+        const val pared_der = 1f
         const val pared_arri = 0f
-        const val pared_baj = 2f
+        const val pared_baj = 1f
         const val radio_bola = 0.015f
         const val friccion = 0.96f //aportacion IA
         const val STOP_THRESHOLD = 0.0005f //aportacion IA
