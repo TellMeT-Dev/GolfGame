@@ -24,11 +24,64 @@ class GameEngine {
         posicion_i = Vector2D(0.5f, 0.8f),
         posicion = Vector2D(0.5f, 0.8f)
     )
-    private var hole = Hole(posicion = Vector2D(0.5f, 0.2f))
+    private val holes = listOf(
+        Hole(
+            posicion = Vector2D(0.5f, 0.2f)
+        ),
+        Hole(
+            posicion = Vector2D(0.2f, 0.3f)
+        ),
+        Hole(
+            posicion = Vector2D(0.8f, 0.25f)
+        )
+    )
+
+    private var currentHoleIndex = 0
+
+    private var hole = holes[currentHoleIndex]
     private var velocity = Vector2D(0f, 0f)
     private var golpes = 0
     private var gameStatus = GameStatus.READY
     private var isGameFinished = false
+
+
+    // Agregacion de la seleccion de hoyos
+    fun loadHoleByIndex(index: Int) {
+        if (index !in holes.indices) return
+
+        currentHoleIndex = index
+        hole = holes[currentHoleIndex]
+
+        ball = Ball(
+            posicion_i = ball.posicion_i,
+            posicion = ball.posicion_i
+        )
+
+        velocity = Vector2D(0f, 0f)
+        golpes = 0
+        gameStatus = GameStatus.READY
+    }
+
+    // carga del nuevo hoyo
+    fun loadNextHole() {
+        if (currentHoleIndex < holes.lastIndex) {
+            currentHoleIndex++
+            hole = holes[currentHoleIndex]
+
+            ball = Ball(
+                posicion_i = ball.posicion_i,
+                posicion = ball.posicion_i
+            )
+
+            velocity = Vector2D(0f, 0f)
+            golpes = 0
+            gameStatus = GameStatus.READY
+        } else {
+            isGameFinished = true
+            gameStatus = GameStatus.HOLE_COMPLETED
+        }
+    }
+
 
     fun getCurrentState(): GameState {
         return GameState(
@@ -106,8 +159,8 @@ class GameEngine {
 
     fun resetHole() {
         ball = Ball(
-            posicion_i = Vector2D(0.5f, 0.8f),
-            posicion = Vector2D(0.5f, 0.8f)
+            posicion_i = ball.posicion_i,
+            posicion = ball.posicion_i
         )
         velocity = Vector2D(0f, 0f)
         golpes = 0
@@ -115,6 +168,8 @@ class GameEngine {
     }
 
     fun restartEntireGame() {
+        currentHoleIndex = 0
+        hole = holes[currentHoleIndex]
         resetHole()
         isGameFinished = false
     }
