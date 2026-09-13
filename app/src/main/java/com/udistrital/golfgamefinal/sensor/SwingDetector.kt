@@ -16,6 +16,8 @@ class SwingDetector(
     val noiseFilterFactor: Float = 0.92f,
     val cooldownMs: Long = 850L
 ) {
+
+    private var calibrationOffset = -Math.PI.toFloat() / 2f
     private var gravityX = 0f
     private var gravityY = 0f
     private var gravityZ = 9.81f
@@ -129,7 +131,7 @@ class SwingDetector(
     }
 
     fun getAimDirection(): Float {
-        return accumulatedAngleZ
+        return accumulatedAngleZ - calibrationOffset
     }
 
     fun calculateDirectionFromAccelerometer(ax: Float, ay: Float): Float {

@@ -1,4 +1,4 @@
-package com.udistrital.golfgamefinal.model
+package com.udistrital.golfgamefinal.enums
 
 enum class GameStatus {
     READY, //listo para jugar

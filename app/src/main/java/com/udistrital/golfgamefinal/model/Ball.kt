@@ -11,5 +11,4 @@ data class Ball (val posicion_i: Vector2D,
         posicion = newPosition
         return posicion
     }
-
 }

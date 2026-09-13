@@ -1,6 +1,6 @@
 package com.udistrital.golfgamefinal.ui
 
-import android.R
+import android.app.Application
 import android.graphics.BitmapFactory
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Box
@@ -13,6 +13,8 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -22,12 +24,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.graphics.Canvas
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.modifier.modifierLocalOf
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.AnnotatedString
@@ -39,15 +38,68 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import java.nio.file.WatchEvent
+import com.udistrital.golfgamefinal.model.Ball
+import com.udistrital.golfgamefinal.model.Vector2D
+import kotlin.math.cos
+import kotlin.math.sin
 
 @Composable
 fun GameScreen (
     innerPadding: PaddingValues, onClickGame: () -> Unit
 ){
+
+
+
     val context = LocalContext.current
     val config = LocalConfiguration.current
     var actualHole by remember { mutableStateOf(0) }
+
+
+    val gameViewModel = remember{ GameViewModel(context.applicationContext as Application) }
+
+    LaunchedEffect(Unit) {
+        gameViewModel.onStartSwingDetection()
+    }
+
+    val zAxis by gameViewModel.currentAimDirection.collectAsState()
+
+    var calibrationOffset by remember { mutableStateOf(0f) }
+    var calibrationSamples by remember { mutableStateOf(0) }
+    var isCalibrated by remember { mutableStateOf(false) }
+    var calibrationSum by remember { mutableStateOf(0f) }
+    val calibrationTarget = 10
+
+    val rawAngle = zAxis
+    val calibratedAngle = if (isCalibrated) rawAngle - calibrationOffset else rawAngle
+    val zDegree = Math.toDegrees(calibratedAngle.toDouble()).toFloat()
+
+    if (!isCalibrated) {
+        val magnitude = gameViewModel.currentAccelerationMagnitude.collectAsState().value
+        val isStationary = magnitude in 9.0f..10.6f
+                if (isStationary) {
+                    calibrationSum += zAxis
+                            calibrationSamples++
+                            if (calibrationSamples >= calibrationTarget) {
+                                calibrationOffset = calibrationSum / calibrationTarget
+                                isCalibrated = true
+                            }
+                } else {
+                    calibrationSamples = 0
+                    calibrationSum = 0f
+                }
+    }
+
+    val ball: Ball(
+        Vector2D(
+
+        ),
+        Vector2D(
+
+        )
+    )
+
+    val vectorBall = ball.reset()
+
 
     Canvas(Modifier.fillMaxSize()) {
         drawImage(
@@ -183,8 +235,8 @@ fun GameScreen (
                     (size.height/6f)*5f
                 ),
                 end = Offset(
-                    (size.width /2f)+200f,
-                    (size.height /6f)*5 -200f
+                    (size.width /2f) + (cos(calibratedAngle) * 300f),
+                    ((size.height/6f)*5f) + (sin(calibratedAngle) * 300f)
                 ),
                 strokeWidth = 20f
             )
@@ -221,7 +273,7 @@ fun GameScreen (
         }
 
         Button(
-            onClick = onClickGame,
+            onClick = (onClickGame),
             modifier = Modifier.align(Alignment.TopStart)
                 .offset(
                     x = (LocalConfiguration.current.screenWidthDp * 12f / 17f).dp,

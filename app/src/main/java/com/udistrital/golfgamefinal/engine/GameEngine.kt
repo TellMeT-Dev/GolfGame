@@ -2,7 +2,7 @@ package com.udistrital.golfgamefinal.engine
 
 import com.udistrital.golfgamefinal.model.Ball
 import com.udistrital.golfgamefinal.model.GameState
-import com.udistrital.golfgamefinal.model.GameStatus
+import com.udistrital.golfgamefinal.enums.GameStatus
 import com.udistrital.golfgamefinal.model.Hole
 import com.udistrital.golfgamefinal.model.Shot
 import com.udistrital.golfgamefinal.model.Vector2D

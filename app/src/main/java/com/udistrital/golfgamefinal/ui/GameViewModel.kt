@@ -2,15 +2,11 @@ package com.udistrital.golfgamefinal.ui
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.viewModelScope
+import com.udistrital.golfgamefinal.sensor.SwingDetector
 import com.udistrital.golfgamefinal.engine.GameEngine
 import com.udistrital.golfgamefinal.model.GameState
-import com.udistrital.golfgamefinal.model.GameStatus
-import com.udistrital.golfgamefinal.model.Shot
-import com.udistrital.golfgamefinal.model.Vector2D
 import com.udistrital.golfgamefinal.sensor.AndroidSensorManager
 import com.udistrital.golfgamefinal.sensor.SensorData
-import com.udistrital.golfgamefinal.sensor.SwingDetector
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
@@ -50,11 +46,6 @@ class GameViewModel(
             StateFlow<Float> =
         _currentAimDirection
 
-    private val _showHomeScreen =
-        MutableStateFlow(true)
-
-    val showHomeScreen: StateFlow<Boolean> =
-        _showHomeScreen
 
 
 
@@ -75,6 +66,10 @@ class GameViewModel(
 
     fun onStopSwingDetection() {
         sensorManager.stopListening()
+    }
+
+    fun getAimDirection(): Float {
+        return swingDetector.getAimDirection()
     }
 
 
@@ -102,14 +97,6 @@ class GameViewModel(
         swingDetector.resetDetector()
 
         updateGameState()
-    }
-
-
-    fun onBackToHome() {
-
-        onStopSwingDetection()
-
-        _showHomeScreen.value = true
     }
 
     fun onHoleSelected(holeIndex: Int) {
