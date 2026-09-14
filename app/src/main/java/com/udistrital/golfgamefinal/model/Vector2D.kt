@@ -20,5 +20,4 @@ data class Vector2D(val x: Float, val y: Float){
         val oper = sqrt(x * x + y * y)
         return oper
     }
-
 }

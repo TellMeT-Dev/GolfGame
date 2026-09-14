@@ -20,7 +20,7 @@ class GameEngine {
         const val MAX_STROKE_DISTANCE = 0.4f // aportacion IA
     }
 
-    private var ball = Ball(
+    var ball = Ball(
         posicion_i = Vector2D(0.5f, 0.8f),
         posicion = Vector2D(0.5f, 0.8f)
     )
