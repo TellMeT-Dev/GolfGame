@@ -3,6 +3,7 @@ package com.udistrital.golfgamefinal.ui
 import android.app.Application
 import android.graphics.BitmapFactory
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -62,6 +63,7 @@ fun GameScreen(
     val aimDir by gameViewModel.currentAimDirection.collectAsState()
     val currentHole by gameViewModel.currentHole.collectAsState()
     val holePos by gameViewModel.holePosition.collectAsState()
+    val golpes by gameViewModel.golpes.collectAsState()
 
     LaunchedEffect(Unit) {
         gameViewModel.initScreen(screenWidth, screenHeight, density)
@@ -91,7 +93,7 @@ fun GameScreen(
 
     val labelTime = remember {
         textMeasurer.measure(
-            AnnotatedString("Tiempo"),
+            AnnotatedString("Golpes"),
             TextStyle(
                 fontSize = 24.sp,
                 fontWeight = FontWeight.Bold,
@@ -100,9 +102,9 @@ fun GameScreen(
         )
     }
 
-    val textTime = remember {
+    val textTime = remember(golpes) {
         textMeasurer.measure(
-            AnnotatedString("1:00"),
+            AnnotatedString(golpes.toString()),
             TextStyle(
                 fontSize = 32.sp,
                 fontWeight = FontWeight.Bold,
@@ -121,6 +123,18 @@ fun GameScreen(
             )
         )
     }
+    Canvas(
+        modifier = Modifier.fillMaxSize()
+    ) {
+
+        drawImage(
+            image = gameBitmap,
+            dstSize = IntSize(
+                config.screenWidthDp * 4,
+                config.screenHeightDp * 4
+            )
+        )
+    }
 
     Box(
         modifier = Modifier
@@ -132,13 +146,6 @@ fun GameScreen(
                 .padding(innerPadding)
                 .fillMaxSize()
         ) {
-            drawImage(
-                image = gameBitmap,
-                dstSize = IntSize(
-                    config.screenWidthDp * 4,
-                    config.screenHeightDp * 4
-                )
-            )
 
             // Panel Hoyo
             drawRoundRect(

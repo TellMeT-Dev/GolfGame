@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.udistrital.golfgamefinal.sensor.SwingDetector
 import com.udistrital.golfgamefinal.engine.GameEngine
 import com.udistrital.golfgamefinal.model.GameState
+import com.udistrital.golfgamefinal.model.Shot
 import com.udistrital.golfgamefinal.model.Vector2D
 import com.udistrital.golfgamefinal.sensor.AndroidSensorManager
 import com.udistrital.golfgamefinal.sensor.SensorData
@@ -73,6 +74,8 @@ class GameViewModel(
     private var density = 1f
     private var holeIndex = 0
     private var holePositions = listOf<Vector2D>()
+    private val _golpes = MutableStateFlow(0)
+    val golpes: StateFlow<Int> = _golpes
 
     fun initScreen(width: Float, height: Float, d: Float) {
         screenWidth = width
@@ -100,6 +103,7 @@ class GameViewModel(
                     val force = (az - 14f) * 2.0f
                     velX = force * cos(dir)
                     velY = force * sin(dir)
+                    _golpes.value = gameEngine.golpes
                 }
 
                 val pos = _ballPosition.value
@@ -125,12 +129,13 @@ class GameViewModel(
                 )
                 if (dist < 80f / density) {
                     holeIndex = (holeIndex + 1) % holePositions.size
-                    _currentHole.value = holeIndex + 1
+                    _currentHole.value ++
                     _holePosition.value = holePositions[holeIndex]
                     _ballPosition.value =
                         Vector2D(screenWidth / 2f, screenHeight * 4f / 6f)
                     velX = 0f
                     velY = 0f
+                    _golpes.value = 0
                 }
 
                 velX *= 0.94f
@@ -168,12 +173,14 @@ class GameViewModel(
 
         if (shot != null) {
             gameEngine.processShot(shot)
+            _golpes.value = gameEngine.golpes
             updateGameState()
         }
     }
 
     fun onResetClicked() {
         gameEngine.resetHole()
+        _golpes.value = 0
         swingDetector.resetDetector()
         holeIndex = 0
         _currentHole.value = 1

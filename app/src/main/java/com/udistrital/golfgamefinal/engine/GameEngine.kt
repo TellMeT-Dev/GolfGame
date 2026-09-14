@@ -40,7 +40,7 @@ class GameEngine {
 
     private var hole = holes[currentHoleIndex]
     private var velocity = Vector2D(0f, 0f)
-    private var golpes = 0
+    var golpes = 0
     private var gameStatus = GameStatus.READY
     private var isGameFinished = false
 
@@ -113,7 +113,7 @@ class GameEngine {
         gameStatus = GameStatus.PROCESSING_SHOT
     }
 
-    fun updatePhysics() { //aportacion IA
+    fun updatePhysics() {
         if (gameStatus != GameStatus.PROCESSING_SHOT) return
 
         val newX = ball.posicion.x + velocity.x
